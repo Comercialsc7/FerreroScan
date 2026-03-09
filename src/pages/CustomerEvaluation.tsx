@@ -28,90 +28,6 @@ type Category = {
 
 const categories: Category[] = [
   {
-    id: 'mom7',
-    title: 'MOM 7',
-    products: [
-      { id: 'mom7-1', name: 'Bauducco Choco Biscuit ao Leite 36 g' },
-      { id: 'mom7-2', name: 'Bauducco Choco Biscuit ao Leite 80 g' },
-      {
-        id: 'mom7-3',
-        name: 'Bauducco Cookies Tradicional 60 g (Cash & Carry)',
-      },
-      { id: 'mom7-4', name: 'Bauducco Cookies Tradicional 100 g' },
-      { id: 'mom7-5', name: 'Bauducco Wafer Chocolate 140 g' },
-      { id: 'mom7-6', name: 'Bauducco Pão de Forma Tradicional 390 g' },
-      { id: 'mom7-7', name: 'Bauducco Bolinho Duplo Chocolate 40 g' },
-      { id: 'mom7-8', name: 'Pão de Forma Integral Visconti 400 g' },
-      { id: 'mom7-9', name: 'Bauducco Roll Chocolate 34 g' },
-    ],
-  },
-  {
-    id: 'mom16',
-    title: 'MOM 16',
-    products: [
-      { id: 'mom16-1', name: 'Bauducco Wafer Morango 140 g' },
-      { id: 'mom16-2', name: 'Bauducco Cookies Maxi 96 g' },
-      { id: 'mom16-3', name: 'Bauducco Recheado Baunilha 108 g' },
-      { id: 'mom16-4', name: 'Bauducco Cereal Castanha 170 g' },
-      { id: 'mom16-5', name: 'Bauducco Pão de Forma Integral 390 g' },
-      { id: 'mom16-6', name: 'Bauducco Bisnaguinha 260 g' },
-      { id: 'mom16-7', name: 'Bauducco Torrada Tradicional 142 g' },
-      { id: 'mom16-8', name: 'Bauducco Bolinho Laranja 40 g' },
-      { id: 'mom16-9', name: 'Bauducco Duo Chocolate 27 g' },
-    ],
-  },
-  {
-    id: 'mom51',
-    title: 'MOM 51',
-    products: [
-      { id: 'mom51-1', name: 'Bauducco Bolo Chocolate 200 g' },
-      { id: 'mom51-2', name: 'PAO HOT DOG BAUD 200 GR' },
-      { id: 'mom51-3', name: 'Bauducco Pão Multigrãos 390 g' },
-      { id: 'mom51-4', name: 'Bauducco Pão de Mel Especial 180 g' },
-      { id: 'mom51-5', name: 'Bauducco Toast Tradicional 128 g' },
-      { id: 'mom51-6', name: 'Bauducco Torrada Integral 142 g' },
-      { id: 'mom51-7', name: 'Bauducco Torrada Multigrãos 142 g' },
-      { id: 'mom51-8', name: 'Bauducco Torrada Tradicional M.Pack 284 g' },
-      { id: 'mom51-9', name: 'Torrada Tradicional Visconti 120 g' },
-      { id: 'mom51-10', name: 'Torrada Integral Visconti 120 g' },
-      { id: 'mom51-11', name: 'Pão de Forma Tradicional Visconti 400 g' },
-      { id: 'mom51-12', name: 'BISC BAUD 84 GR SPECULOOS' },
-      { id: 'mom51-13', name: 'Bauducco Cereal Maçã e Uva 141 g' },
-      { id: 'mom51-14', name: 'Bauducco Biscoito Chocolate 335 g' },
-      {
-        id: 'mom51-15',
-        name: 'Bauducco Biscoito Banana com Canela 354 g',
-      },
-      { id: 'mom51-16', name: 'Bauducco Biscoito Leite com Gotas 335 g' },
-      { id: 'mom51-17', name: 'Bauducco Choco Biscuit Meio Amargo 80 g' },
-      { id: 'mom51-18', name: 'Bauducco Cookies Chocolate 100 g' },
-      { id: 'mom51-19', name: 'Bauducco Cookies Maxi Branco 96 g' },
-      { id: 'mom51-20', name: 'Bauducco Biscoito Maizena 170 g' },
-      { id: 'mom51-21', name: 'Bauducco Recheadinho Chocolate 104 g' },
-      { id: 'mom51-22', name: 'Bauducco Recheadinho Goiaba 112 g' },
-      {
-        id: 'mom51-23',
-        name: 'Bauducco Recheado Duplo Chocolate 108 g',
-      },
-      { id: 'mom51-24', name: 'Bauducco Recheado Morango 108 g' },
-      { id: 'mom51-25', name: 'Bauducco Cream Cracker 165 g' },
-      {
-        id: 'mom51-26',
-        name: 'Bauducco Wafer Chocolate c/ Avelã 140 g',
-      },
-      { id: 'mom51-27', name: 'Bauducco Triplo Chocolate 140 g' },
-      { id: 'mom51-28', name: 'Bauducco Wafer Maxi Chocolate 104 g' },
-      { id: 'mom51-29', name: 'PAO DE HAMBURGUER BAUD 200 GR' },
-      { id: 'mom51-30', name: 'Bauducco Barrinha Goiaba 30 g' },
-      {
-        id: 'mom51-31',
-        name: 'Bauducco Bolinho Chocolate com Baunilha 40 g',
-      },
-      { id: 'mom51-32', name: 'Bauducco Bolinho Morango 40 g' },
-      { id: 'mom51-33', name: 'Bauducco Pão de Mel Display 30 g' },
-    ],
-  },
-  {
     id: 'myps',
     title: 'MIX MYPS',
     products: [
@@ -121,91 +37,6 @@ const categories: Category[] = [
       { id: 'myps-4', name: 'kinder joy 20 gr c/48 jurrasic' },
       { id: 'myps-5', name: 'tic tac 14,5 gr menta' },
       { id: 'myps-6', name: 'tic tac 14,5 gr laranja' },
-    ],
-  },
-  {
-    id: 'mix2',
-    title: 'MIX SCJ 2',
-    products: [
-      {
-        id: 'mix2-1',
-        name: 'Glade Aerossol Promo Oferta Especial 360Ml Lavanda',
-      },
-      { id: 'mix2-2', name: 'Raid Aero Multi 420Ml Base Água Lev+Pag-' },
-    ],
-  },
-  {
-    id: 'mix7',
-    title: 'MIX SCJ 7',
-    products: [
-      { id: 'mix7-1', name: 'GLADE GOTAS 120 ML LAVANDA' },
-      { id: 'mix7-2', name: 'Raid Aero Multi 420Ml Eucalipto Lev+Pag-' },
-      { id: 'mix7-3', name: 'Lysoform Líquido 1L Original' },
-      { id: 'mix7-4', name: 'Pato Pastilha 3 Un 20% Gts Lavanda' },
-      {
-        id: 'mix7-5',
-        name: 'Glade Ped. Sanit. 25G Of. Especial Bouquet De Lavanda',
-      },
-    ],
-  },
-  {
-    id: 'mix17',
-    title: 'MIX SCJ 17',
-    products: [
-      {
-        id: 'mix17-1',
-        name: 'Glade Aerossol Promo Oferta Especial 360Ml Frutas E Flores Vibrantes',
-      },
-      {
-        id: 'mix17-2',
-        name: 'Glade Aerossol Promo Oferta Especial 360Ml Lembranças De Infância',
-      },
-      { id: 'mix17-3', name: 'GLADE GOTAS 120 ML T MACIEZ' },
-      { id: 'mix17-4', name: 'Raid Liq Elétrico Oferta Especial Ap.' },
-      {
-        id: 'mix17-5',
-        name: 'Raid Liq Elétrico Ref 2 un. Twinpack (45 Noites)',
-      },
-      {
-        id: 'mix17-6',
-        name: 'Raid Aero Multi Insetos 420Ml Água Purif. Lev+Pag-',
-      },
-      { id: 'mix17-7', name: 'OFF! Family Repelente Spray 100Ml' },
-      { id: 'mix17-8', name: 'Lysoform Líquido 1L Lavanda' },
-      { id: 'mix17-9', name: 'Pato Gel 6 Un Marine Promo Ap Gts' },
-      {
-        id: 'mix17-10',
-        name: 'Pato Germinex Limpador Sanitário 500 Ml Marine',
-      },
-    ],
-  },
-  {
-    id: 'mix28',
-    title: 'MIX SCJ 28',
-    products: [
-      {
-        id: 'mix28-1',
-        name: 'Glade Automático RF Oferta Especial 269Ml Lavanda & Vanilla',
-      },
-      {
-        id: 'mix28-2',
-        name: 'Glade Contínuos Difusor 100Ml Lembranças De Infancia',
-      },
-      { id: 'mix28-3', name: 'Glade Contínuos Difusor 100ml Flores Vibrantes' },
-      { id: 'mix28-4', name: 'Glade Contínuos Difusor 100Ml Lavanda' },
-      { id: 'mix28-5', name: 'GLADE GOTAS 120 ML LEMBR INFANCIA' },
-      { id: 'mix28-6', name: 'Raid Liq Elétrico Ref (45 noites)' },
-      { id: 'mix28-7', name: 'OFF! Kids 200ml' },
-      { id: 'mix28-8', name: 'Pato gel Marine 6 Un 38g Menor Preço' },
-      {
-        id: 'mix28-9',
-        name: 'Mr. Músc. Deseng. Sachet 400Ml Laranja Menor Preço',
-      },
-      { id: 'mix28-10', name: 'Pato Pastilha 3 Un 20% Gts Citrus' },
-      {
-        id: 'mix28-11',
-        name: 'Pato Ped. Sanit. Of. Especial 25G Marine',
-      },
     ],
   },
 ]
@@ -220,7 +51,7 @@ const CustomerEvaluationPage = () => {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false)
   const [checkedProducts, setCheckedProducts] = useState<Record<string, boolean>>(
     {
-      'mom7-1': true,
+      'myps-1': true,
     },
   )
   const [images, setImages] = useState<string[]>([])
@@ -609,7 +440,7 @@ const CustomerEvaluationPage = () => {
             </span>
           </div>
 
-          <Accordion type="multiple" defaultValue={['mom7']} className="space-y-3">
+          <Accordion type="multiple" defaultValue={['myps']} className="space-y-3">
             {categories.map((category) => (
               <AccordionItem
                 key={category.id}
