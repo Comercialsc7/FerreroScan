@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'placeholder.svg', 'Scan.png'],
+      includeAssets: ['favicon.ico', 'placeholder.svg', 'F.png'],
       manifest: {
         name: 'FerreroScan',
         short_name: 'FerreroScan',
@@ -38,12 +38,12 @@ export default defineConfig(({ mode }) => ({
         start_url: '/',
         icons: [
           {
-            src: 'Scan.png',
+            src: 'F.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: 'Scan.png',
+            src: 'F.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable',
