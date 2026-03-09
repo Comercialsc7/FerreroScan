@@ -37,7 +37,7 @@ const ManualEntryPage = () => {
   }, [customerId, navigate])
 
   useEffect(() => {
-    document.title = 'Digitar Código - TradeScan'
+    document.title = 'Digitar Código - FerreroScan'
   }, [])
 
   const form = useForm<ManualEntrySchema>({

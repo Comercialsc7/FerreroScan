@@ -24,7 +24,7 @@ const ProductDetailsPage = () => {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    document.title = 'Detalhes do Produto - TradeScan'
+    document.title = 'Detalhes do Produto - FerreroScan'
 
     const fetchData = async () => {
       if (!customerId || !barcode) return

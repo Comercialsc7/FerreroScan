@@ -1,6 +1,5 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import jsPDF from 'jspdf'
 import {
   ArrowLeft,
   Camera,
@@ -227,7 +226,7 @@ const CustomerEvaluationPage = () => {
   const [images, setImages] = useState<string[]>([])
 
   useEffect(() => {
-    document.title = 'Avaliação do Cliente - TradeScan'
+    document.title = 'Avaliação do Cliente - FerreroScan'
 
     const loadCustomer = async () => {
       if (!id) return
@@ -322,6 +321,7 @@ const CustomerEvaluationPage = () => {
   const handleGeneratePdf = async () => {
     try {
       setIsGeneratingPdf(true)
+      const { default: jsPDF } = await import('jspdf')
 
       const document = new jsPDF({ unit: 'mm', format: 'a4' })
       const pageWidth = document.internal.pageSize.getWidth()

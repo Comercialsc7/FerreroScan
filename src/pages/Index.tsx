@@ -82,7 +82,7 @@ const Index = () => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    document.title = 'Bem-vindo - TradeScan'
+    document.title = 'Bem-vindo - FerreroScan'
   }, [])
 
   useEffect(() => {

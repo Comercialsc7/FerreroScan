@@ -41,9 +41,9 @@ const CustomerDetailsPage = () => {
 
   useEffect(() => {
     if (customer) {
-      document.title = `${customer.nomerazao} - TradeScan`
+      document.title = `${customer.nomerazao} - FerreroScan`
     } else if (!isLoading) {
-      document.title = 'Cliente não encontrado - TradeScan'
+      document.title = 'Cliente não encontrado - FerreroScan'
     }
   }, [customer, isLoading])
 

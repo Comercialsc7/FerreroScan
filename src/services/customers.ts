@@ -2,7 +2,7 @@ import { Database } from '@/lib/supabase/types'
 
 export type Customer = Database['public']['Tables']['clientes']['Row']
 
-const CACHE_KEY = 'tradescan_customers_cache'
+const CACHE_KEY = 'ferreroscan_customers_cache'
 const CACHE_DURATION = 1000 * 60 * 30 // 30 minutes
 
 /**

@@ -25,7 +25,7 @@ const AuthPage = () => {
     const newMode = mode === 'signup' ? 'signup' : 'login'
     setAuthMode(newMode)
     document.title =
-      newMode === 'login' ? 'Entrar - TradeScan' : 'Cadastrar - TradeScan'
+      newMode === 'login' ? 'Entrar - FerreroScan' : 'Cadastrar - FerreroScan'
   }, [mode])
 
   const handleModeChange = (newMode: 'login' | 'signup') => {
@@ -43,7 +43,7 @@ const AuthPage = () => {
       <div className="space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-slate-800 dark:text-white">
-            TradeScan
+            FerreroScan
           </h1>
           <p className="mt-2 text-base text-slate-600 dark:text-slate-400">
             Leitura Comercial Inteligente.

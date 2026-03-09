@@ -2,7 +2,7 @@
 console.log('🧹 Limpando cache do navegador...');
 
 // Limpa o sessionStorage
-sessionStorage.removeItem('tradescan_customers_cache');
+sessionStorage.removeItem('ferreroscan_customers_cache');
 
 console.log('✅ Cache limpo!');
 console.log('');

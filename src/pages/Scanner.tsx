@@ -35,7 +35,7 @@ const ScannerPage = () => {
   }, [customerId, navigate])
 
   useEffect(() => {
-    document.title = 'Escanear Código - TradeScan'
+    document.title = 'Escanear Código - FerreroScan'
   }, [])
 
   useEffect(() => {

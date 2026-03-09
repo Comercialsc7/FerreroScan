@@ -72,7 +72,7 @@ export const AuthForm = ({ authMode, schema }: AuthFormProps) => {
 
         toast({
           title: "Conta criada com sucesso",
-          description: "Bem-vindo ao TradeScan!",
+          description: "Bem-vindo ao FerreroScan!",
         })
         navigate('/welcome')
       }

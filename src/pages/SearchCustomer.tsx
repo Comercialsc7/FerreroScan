@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { searchCustomers, type Customer } from '@/services/customers'
 import { useAuth } from '@/contexts/AuthContext'
-const CACHE_KEY = 'tradescan_customers_cache'
+const CACHE_KEY = 'ferreroscan_customers_cache'
 const CACHE_DURATION = 1000 * 60 * 30 // 30 minutes
 
 const SearchCustomerPage = () => {
@@ -31,7 +31,7 @@ const SearchCustomerPage = () => {
 
   // Load customers with cache
   useEffect(() => {
-    document.title = 'Buscar Cliente - TradeScan'
+    document.title = 'Buscar Cliente - FerreroScan'
 
     const loadCustomers = async () => {
       // Check cache first

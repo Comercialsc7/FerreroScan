@@ -28,8 +28,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'placeholder.svg', 'Scan.png'],
       manifest: {
-        name: 'TradeScan',
-        short_name: 'TradeScan',
+        name: 'FerreroScan',
+        short_name: 'FerreroScan',
         description: 'Leitura Comercial Inteligente.',
         theme_color: '#0f172a',
         background_color: '#ffffff',
