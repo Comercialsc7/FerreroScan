@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {
   ArrowLeft,
@@ -10,23 +10,103 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
 import { cn } from '@/lib/utils'
 import { searchCustomers, type Customer } from '@/services/customers'
 import { useAuth } from '@/contexts/AuthContext'
+
 const CACHE_KEY = 'ferreroscan_customers_cache'
 const CACHE_DURATION = 1000 * 60 * 30 // 30 minutes
+const SEARCH_STATE_KEY = 'ferreroscan_customer_search_state'
+const PAGE_SIZE = 1000
+
+type SearchState = {
+  searchTerm: string
+  selectedCustomerId: string | null
+  currentPage: number
+  scrollY: number
+}
+
+const getStoredSearchState = (): SearchState => {
+  try {
+    const stored = sessionStorage.getItem(SEARCH_STATE_KEY)
+    if (!stored) {
+      return {
+        searchTerm: '',
+        selectedCustomerId: null,
+        currentPage: 1,
+        scrollY: 0,
+      }
+    }
+
+    const parsed = JSON.parse(stored) as Partial<SearchState>
+
+    return {
+      searchTerm: typeof parsed.searchTerm === 'string' ? parsed.searchTerm : '',
+      selectedCustomerId:
+        typeof parsed.selectedCustomerId === 'string'
+          ? parsed.selectedCustomerId
+          : null,
+      currentPage:
+        typeof parsed.currentPage === 'number' && parsed.currentPage > 0
+          ? parsed.currentPage
+          : 1,
+      scrollY:
+        typeof parsed.scrollY === 'number' && parsed.scrollY >= 0
+          ? parsed.scrollY
+          : 0,
+    }
+  } catch (e) {
+    console.warn('Search state read failed:', e)
+    return {
+      searchTerm: '',
+      selectedCustomerId: null,
+      currentPage: 1,
+      scrollY: 0,
+    }
+  }
+}
 
 const SearchCustomerPage = () => {
+  const restoredStateRef = useRef<SearchState>(getStoredSearchState())
+  const mainRef = useRef<HTMLElement | null>(null)
+  const hasRestoredScrollRef = useRef(false)
   const [allCustomers, setAllCustomers] = useState<Customer[]>([])
   const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm, setSearchTerm] = useState(restoredStateRef.current.searchTerm)
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
-    null,
+    restoredStateRef.current.selectedCustomerId,
   )
+  const [currentPage, setCurrentPage] = useState(restoredStateRef.current.currentPage)
   const navigate = useNavigate()
   const { signOut } = useAuth()
+
+  const persistSearchState = (overrides?: Partial<SearchState>) => {
+    const nextState: SearchState = {
+      searchTerm,
+      selectedCustomerId,
+      currentPage,
+      scrollY: mainRef.current?.scrollTop ?? restoredStateRef.current.scrollY,
+      ...overrides,
+    }
+
+    restoredStateRef.current = nextState
+
+    try {
+      sessionStorage.setItem(SEARCH_STATE_KEY, JSON.stringify(nextState))
+    } catch (e) {
+      console.warn('Search state write failed:', e)
+    }
+  }
 
 
   // Load customers with cache
@@ -81,6 +161,10 @@ const SearchCustomerPage = () => {
     loadCustomers()
   }, [])
 
+  useEffect(() => {
+    persistSearchState()
+  }, [searchTerm, selectedCustomerId, currentPage])
+
   // Filter customers locally when search term changes
   useEffect(() => {
     if (!searchTerm.trim()) {
@@ -110,8 +194,74 @@ const SearchCustomerPage = () => {
     setFilteredCustomers(filtered)
   }, [searchTerm, allCustomers])
 
+  useEffect(() => {
+    const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / PAGE_SIZE))
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages)
+    }
+  }, [currentPage, filteredCustomers.length])
+
+  useEffect(() => {
+    const mainElement = mainRef.current
+    if (!mainElement) {
+      return
+    }
+
+    const handleScroll = () => {
+      persistSearchState({ scrollY: mainElement.scrollTop })
+    }
+
+    mainElement.addEventListener('scroll', handleScroll)
+
+    return () => mainElement.removeEventListener('scroll', handleScroll)
+  }, [searchTerm, selectedCustomerId, currentPage])
+
+  useEffect(() => {
+    if (isLoading || hasRestoredScrollRef.current) {
+      return
+    }
+
+    const savedScrollY = restoredStateRef.current.scrollY
+    if (!savedScrollY) {
+      hasRestoredScrollRef.current = true
+      return
+    }
+
+    requestAnimationFrame(() => {
+      mainRef.current?.scrollTo({ top: savedScrollY })
+      hasRestoredScrollRef.current = true
+    })
+  }, [isLoading, filteredCustomers.length])
+
+  const totalPages = Math.max(1, Math.ceil(filteredCustomers.length / PAGE_SIZE))
+  const paginatedCustomers = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE
+    return filteredCustomers.slice(start, start + PAGE_SIZE)
+  }, [currentPage, filteredCustomers])
+
+  const visiblePages = useMemo(() => {
+    const pages = new Set<number>([1, totalPages, currentPage - 1, currentPage, currentPage + 1])
+
+    return [...pages]
+      .filter((page) => page >= 1 && page <= totalPages)
+      .sort((a, b) => a - b)
+  }, [currentPage, totalPages])
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value)
+    setCurrentPage(1)
+  }
+
   const handleCustomerSelect = (customerId: string) => {
     setSelectedCustomerId((prev) => (prev === customerId ? null : customerId))
+  }
+
+  const handleDetailsClick = (customerId: string) => {
+    persistSearchState({
+      selectedCustomerId,
+      scrollY: mainRef.current?.scrollTop ?? restoredStateRef.current.scrollY,
+    })
+    navigate(`/customer/${customerId}`)
   }
 
   const handleScan = () => {
@@ -137,14 +287,14 @@ const SearchCustomerPage = () => {
         <div className="w-10" />
       </header>
 
-      <main className="flex-1 overflow-y-auto p-4">
+      <main ref={mainRef} className="flex-1 overflow-y-auto p-4">
         <div className="relative mb-4">
           <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
           <Input
             type="text"
             placeholder="Buscar por nome, ID, CNPJ ou rede"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             className="h-14 rounded-xl border-none bg-zinc-200 pl-12 text-zinc-900 placeholder:text-zinc-500 dark:bg-zinc-800/50 dark:text-white dark:placeholder:text-zinc-400"
           />
         </div>
@@ -162,7 +312,12 @@ const SearchCustomerPage = () => {
             </div>
           ) : filteredCustomers.length > 0 ? (
             <>
-              {filteredCustomers.slice(0, 100).map((customer) => (
+              <div className="rounded-lg bg-zinc-100 px-4 py-3 text-sm text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                Mostrando {(currentPage - 1) * PAGE_SIZE + 1} a{' '}
+                {Math.min(currentPage * PAGE_SIZE, filteredCustomers.length)} de{' '}
+                {filteredCustomers.length.toLocaleString('pt-BR')} clientes.
+              </div>
+              {paginatedCustomers.map((customer) => (
                 <div
                   key={customer.id}
                   className={cn(
@@ -199,22 +354,63 @@ const SearchCustomerPage = () => {
                     {selectedCustomerId === customer.id && (
                       <CheckCircle2 className="h-6 w-6 flex-shrink-0 text-primary" />
                     )}
-                    <Link
-                      to={`/customer/${customer.id}`}
+                    <button
+                      type="button"
                       className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                      onClick={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDetailsClick(customer.id)
+                      }}
                       aria-label={`Ver detalhes de ${customer.nomerazao}`}
                     >
                       <ChevronRight className="h-6 w-6 flex-shrink-0 text-zinc-400 dark:text-zinc-500" />
-                    </Link>
+                    </button>
                   </div>
                 </div>
               ))
               }
-              {filteredCustomers.length > 100 && (
-                <div className="rounded-lg bg-zinc-100 p-4 text-center text-sm text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                  Mostrando 100 de {filteredCustomers.length.toLocaleString('pt-BR')} clientes. Continue digitando para refinar.
-                </div>
+              {totalPages > 1 && (
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setCurrentPage((prev) => Math.max(1, prev - 1))
+                          mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                        }}
+                        className={cn(currentPage === 1 && 'pointer-events-none opacity-50')}
+                      />
+                    </PaginationItem>
+                    {visiblePages.map((page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          href="#"
+                          isActive={page === currentPage}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setCurrentPage(page)
+                            mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                          }}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                          mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                        }}
+                        className={cn(currentPage === totalPages && 'pointer-events-none opacity-50')}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
               )}
             </>
           ) : (
