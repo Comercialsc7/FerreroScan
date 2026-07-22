@@ -17,6 +17,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useAuth } from '@/contexts/AuthContext'
+import { saveCustomerEvaluation } from '../services/customerEvaluations'
 import { getCustomerById, type Customer } from '@/services/customers'
 import { toast } from '@/components/ui/use-toast'
 
@@ -100,6 +102,7 @@ const categories: Category[] = [
 const CustomerEvaluationPage = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
+  const { user } = useAuth()
 
   const [customer, setCustomer] = useState<Customer | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -208,6 +211,10 @@ const CustomerEvaluationPage = () => {
   const handleGeneratePdf = async () => {
     try {
       setIsGeneratingPdf(true)
+      if (!user?.id) {
+        throw new Error('Usuário não autenticado para salvar a avaliação.')
+      }
+
       const { default: jsPDF } = await import('jspdf')
 
       const document = new jsPDF({ unit: 'mm', format: 'a4' })
@@ -234,6 +241,42 @@ const CustomerEvaluationPage = () => {
         title: category.title,
         products: category.products,
       }))
+      const selectedProducts = categories.flatMap((category) =>
+        category.products
+          .filter((product) => checkedProducts[product.id])
+          .map((product) => ({
+            id: product.id,
+            name: product.name,
+            categoryId: category.id,
+            categoryTitle: category.title,
+          })),
+      )
+
+      await saveCustomerEvaluation({
+        userId: user.id,
+        userEmail: user.email ?? null,
+        customerId: customer.id,
+        customerName: customer.nomerazao || 'Cliente sem nome',
+        evaluation: {
+          generatedAt: timestamp.toISOString(),
+          location,
+          notes: notes.trim(),
+          selectedProducts,
+          summary: {
+            selectedCount: selectedProducts.length,
+            totalCount: totalItems,
+          },
+          customerSnapshot: {
+            id: customer.id,
+            seqpessoa: customer.seqpessoa,
+            name: customer.nomerazao || 'Cliente sem nome',
+            cnpj: customer.cnpj,
+            cidade: customer.cidade,
+            rede: customer.rede,
+            atividade: customer.atividade,
+          },
+        },
+      })
 
       let y = 14
 
@@ -413,8 +456,8 @@ const CustomerEvaluationPage = () => {
       document.save(`avaliacao-${safeName || 'cliente'}.pdf`)
 
       toast({
-        title: 'PDF gerado com sucesso',
-        description: 'O arquivo foi baixado no seu dispositivo.',
+        title: 'Avaliação salva e PDF gerado',
+        description: 'O registro foi salvo no Supabase e o PDF baixado no seu dispositivo.',
       })
     } catch (error) {
       console.error('Error generating evaluation PDF:', error)
