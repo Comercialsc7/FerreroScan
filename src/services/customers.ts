@@ -4,6 +4,11 @@ export type Customer = Database['public']['Tables']['clientes']['Row']
 
 const CACHE_KEY = 'ferreroscan_customers_cache'
 const CACHE_DURATION = 1000 * 60 * 30 // 30 minutes
+const CONFIGURED_CUSTOMER_TEAM = import.meta.env.VITE_CUSTOMER_TEAM_FILTER as
+  | string
+  | undefined
+const DEFAULT_CUSTOMER_TEAM =
+  CONFIGURED_CUSTOMER_TEAM?.trim() || 'FERRERO'
 
 /**
  * Keeps only the fields the app actually uses, discarding unused columns
@@ -71,7 +76,10 @@ export const getCustomerById = async (id: string): Promise<Customer | null> => {
   }
 }
 
-export const searchCustomers = async (term: string) => {
+export const searchCustomers = async (
+  term: string,
+  equipe = DEFAULT_CUSTOMER_TEAM,
+) => {
   const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL_CUSTOMERS
 
   if (!webhookUrl) {
@@ -87,7 +95,8 @@ export const searchCustomers = async (term: string) => {
       },
       body: JSON.stringify({
         type: 'clientes',
-        term
+        term,
+        equipe: equipe?.trim() || null,
       }),
     })
 
