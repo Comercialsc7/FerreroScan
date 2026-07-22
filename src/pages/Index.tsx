@@ -9,8 +9,7 @@ import { Button } from '@/components/ui/button'
 
 const slides = [
   {
-    image:
-      'https://www.grupocpcon.com/wp-content/uploads/2024/06/codigo-de-barras-768x439.webp',
+    image: '/codigobarras.png',
     alt: 'Imagem representando pagamento com código de barras',
     title: 'Leitor Inteligente de Produtos Comerciais',
     description:
